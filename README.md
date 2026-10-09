@@ -21,16 +21,13 @@ pip install -r requirements.txt
 torchrun --nproc_per_node=1 Train.py --config [CONFIG_PATH]
 ```
 
-5.	Evaluation:
+4.	Evaluation:
 
 ```bash
 torchrun --nproc_per_node=1 Test.py --config [CONFIG_PATH] --model [FINE-TUNED_MODEL_PATH]
 ```
 
-7.	Download trained model weights from this shared (LINK)
-
-
-##Dataset 
+## Dataset 
 ReCoDe dataset (https://github.com/prasadvineetv/ReCoDeWaste-Dataset)
 
 ## Acknowledgement
