@@ -16,10 +16,18 @@ pip install -r requirements.txt
 1.	Download the dataset and split it into training, validation and testing.
 2.	Download the pre-trained SAM3 and put it in ./pretrained folder.
 3.	Training:
-torchrun --nproc_per_node=1 Train.py --config [CONFIG_PATH] 
-4.	Evaluation:
+
+```bash
+torchrun --nproc_per_node=1 Train.py --config [CONFIG_PATH]
+```
+
+5.	Evaluation:
+
+```bash
 torchrun --nproc_per_node=1 Test.py --config [CONFIG_PATH] --model [FINE-TUNED_MODEL_PATH]
-5.	Download trained model weights from this shared (LINK)
+```
+
+7.	Download trained model weights from this shared (LINK)
 
 
 ##Dataset 
