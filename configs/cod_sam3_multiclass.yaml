@@ -1,0 +1,127 @@
+train_dataset:
+  dataset:
+    name: paired-image-folders
+    args:
+      classes: ['background', 'aggregate', 'cardboard', 'hard_plastic', 'metal', 'soft_plastic', 'timber']
+      palette: [[0,0,0], [230,25,75], [60,180,75], [255,225,25], [0,130,200], [245,130,48], [145,30,180]]
+      root_path_1: " " # image path for training set
+      root_path_2: " " # mask paths for training set
+      cache: none
+      split_key: train
+  wrapper:
+    name: train
+    args:
+#      inp_size: 1024
+      inp_size: 1008
+      augment: false
+  batch_size: 1
+
+val_dataset:
+  dataset:
+    name: paired-image-folders
+    args:
+      classes: ['background', 'aggregate', 'cardboard', 'hard_plastic', 'metal', 'soft_plastic', 'timber']
+      palette: [[0,0,0], [230,25,75], [60,180,75], [255,225,25], [0,130,200], [245,130,48], [145,30,180]]
+      root_path_1: " " # image path for valid set
+      root_path_2: " " # mask paths for valid set
+      cache: none
+      split_key: test
+  wrapper:
+    name: val
+    args:
+#      inp_size: 1024
+      inp_size: 1008
+  batch_size: 1
+
+test_dataset:
+  dataset:
+    name: paired-image-folders
+    args:
+      classes: ['background', 'aggregate', 'cardboard', 'hard_plastic', 'metal', 'soft_plastic', 'timber']
+      palette: [[0,0,0], [230,25,75], [60,180,75], [255,225,25], [0,130,200], [245,130,48], [145,30,180]]
+      root_path_1: " " # image path for test set
+      root_path_2: " " # mask paths for test set
+      cache: none
+      split_key: test
+  wrapper:
+    name: val
+    args:
+#      inp_size: 1024
+      inp_size: 1008
+  batch_size: 1
+
+eval_type: seg
+sam_checkpoint: ".../sam3.pt " # path for SAM3 pre-trined weights
+data_norm:
+  inp:
+    sub:
+    - 0.5
+    div:
+    - 0.5
+  gt:
+    sub:
+    - 0.5
+    div:
+    - 0.5
+  gt_rgb:
+    sub:
+    - 0.5
+    div:
+    - 0.5
+model:
+  name: sam
+  args:
+#    inp_size: 1024
+    inp_size: 1008
+    loss: ce
+    num_classes: 7
+    encoder_mode:
+      name: sam
+#      img_size: 1024
+      img_size: 1008
+      mlp_ratio: 4
+      patch_size: 16
+      qkv_bias: true
+      use_rel_pos: true
+      window_size: 14
+      out_chans: 256
+      scale_factor: 32
+      input_type: fft
+      freq_nums: 0.25
+      prompt_type: highpass
+      prompt_embed_dim: 256
+      tuning_stage: 1234
+      handcrafted_tune: true
+      embedding_tune: true
+      adaptor: adaptor
+      embed_dim: 1024
+      depth: 24
+      num_heads: 16
+      global_attn_indexes:
+      - 5
+      - 11
+      - 17
+      - 23
+optimizer:
+  name: adamw
+  args:
+    lr: 0.00001
+lr_min: 1.0e-6
+epoch_max: 500
+
+multi_step_lr:
+  milestones:
+  - 1
+  gamma: 0.1
+epoch_val: 5
+epoch_save: 5
+
+# resume: null
+resume_path: "" # path for fine-tuned model
+
+# Multi-class semantic segmentation settings
+# Mask format: single-channel PNG with class IDs.
+# CODD example:
+# 0=background, 1=brick, 2=concrete, 3=foam, 4=general_w,
+# 5=gypsum_board, 6=pipes, 7=plastic, 8=stone, 9=tile, 10=wood
+ignore_index: 255
